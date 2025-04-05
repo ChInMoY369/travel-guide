@@ -89,8 +89,9 @@ If you encounter deployment issues:
 
 3. **Database Connection Issues**
    - Verify your `MONGODB_URI` is correct
-   - Ensure your MongoDB Atlas cluster has the correct network access rules
+   - Ensure your MongoDB Atlas cluster has the correct network access rules (whitelist 0.0.0.0/0 for Vercel's dynamic IPs)
    - Check that your database user has the proper permissions
+   - If using MongoDB Atlas, make sure your connection string includes the correct database name
 
 4. **API Errors**
    - Test the `/api/health` endpoint to check API status
@@ -100,6 +101,31 @@ If you encounter deployment issues:
 5. **Static File Issues**
    - Check that uploads directory permissions are correct
    - Verify the static file routes in vercel.json are properly configured
+
+## Server Connection Issues
+
+If your server is not connecting properly in the Vercel deployment:
+
+1. **Check Environment Variables**
+   - Verify all environment variables are correctly set in Vercel's dashboard
+   - Make sure `MONGODB_URI` is set correctly with no special characters or encoding issues
+   - Ensure `NODE_ENV` is set to "production" and `VERCEL` is set to "true"
+
+2. **MongoDB Connection Issues**
+   - In MongoDB Atlas, go to "Network Access" and add 0.0.0.0/0 to whitelist all IPs
+   - Create a dedicated database user for the Vercel deployment
+   - Use the latest MongoDB driver version (should be handled automatically)
+
+3. **Debugging Steps**
+   - Navigate to `/api/health` to verify the server is running
+   - Navigate to `/api/diagnostic` to check database connection status
+   - Review Vercel logs for any errors during serverless function execution
+   - Look for database timeout or connection errors in the logs
+
+4. **Serverless Function Limitations**
+   - Be aware that serverless functions have cold starts and connection timeouts
+   - Consider using MongoDB Atlas connection pooling for better performance
+   - Set appropriate timeouts in mongoose connection options (already configured)
 
 ## Project Structure
 

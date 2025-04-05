@@ -7,14 +7,14 @@
   "rewrites": [
     {
       "source": "/api/health",
-      "destination": "/server/server.js"
+      "destination": "/server/vercel.js"
     },
     {
-      "source": "/api/:path*",
-      "destination": "/server/server.js"
+      "source": "/api/(.*)",
+      "destination": "/server/vercel.js"
     },
     {
-      "source": "/uploads/:path*",
+      "source": "/uploads/(.*)",
       "destination": "/server/uploads/:path*"
     },
     {
