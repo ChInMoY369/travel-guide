@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="100" fill="#FF6B6B" />
+  <path d="M128 256C128 184.471 185.471 127 257 127C328.529 127 386 184.471 386 256C386 327.529 328.529 385 257 385C185.471 385 128 327.529 128 256Z" fill="#FFFFFF" />
+  <path d="M257 144C194.696 144 144 194.696 144 257C144 319.304 194.696 370 257 370C319.304 370 370 319.304 370 257C370 194.696 319.304 144 257 144Z" fill="#FF6B6B" />
+  <path d="M257 170C209.043 170 170 209.043 170 257C170 304.957 209.043 344 257 344C304.957 344 344 304.957 344 257C344 209.043 304.957 170 257 170Z" fill="#FFFFFF" />
+  <!-- Temple icon -->
+  <path d="M220 288H294V340H220V288Z" fill="#FF6B6B" />
+  <path d="M208 288H306V298H208V288Z" fill="#FF6B6B" />
+  <path d="M234 288V340" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" />
+  <path d="M258 288V340" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" />
+  <path d="M280 288V340" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" />
+  <!-- Temple top -->
+  <path d="M198 254L256 204L314 254H198Z" fill="#FF6B6B" />
+  <path d="M208 254H304V268H208V254Z" fill="#FF6B6B" />
+  <path d="M226 228L256 204L286 228H226Z" fill="#FFFFFF" />
+</svg> 
