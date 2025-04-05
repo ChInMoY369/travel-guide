@@ -140,16 +140,24 @@ app.get('/api/diagnostic', async (req, res) => {
 // Define port
 const PORT = process.env.PORT || 5000;
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  
-  // Start the reminder scheduler (check every hour)
-  // In production, you might want to use a more robust scheduling
-  // solution like node-cron, agenda, or bull
-  const schedulerInterval = process.env.REMINDER_CHECK_INTERVAL 
-    ? parseInt(process.env.REMINDER_CHECK_INTERVAL) * 1000
-    : 60 * 60 * 1000; // Default: 1 hour in milliseconds
-  
-  startReminderScheduler(schedulerInterval);
-}); 
+// For local development, start the server
+if (process.env.NODE_ENV !== 'production' || process.env.VERCEL_ENV === undefined) {
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    
+    // Start the reminder scheduler (check every hour)
+    // In production, you might want to use a more robust scheduling
+    // solution like node-cron, agenda, or bull
+    const schedulerInterval = process.env.REMINDER_CHECK_INTERVAL 
+      ? parseInt(process.env.REMINDER_CHECK_INTERVAL) * 1000
+      : 60 * 60 * 1000; // Default: 1 hour in milliseconds
+    
+    startReminderScheduler(schedulerInterval);
+  });
+} else {
+  // For vercel environment, just export the app
+  console.log('Running in Vercel environment');
+}
+
+// Export the Express app for Vercel serverless deployment
+module.exports = app; 
