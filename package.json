@@ -1,0 +1,15 @@
+{
+  "name": "travel-guide",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack Travel Guide application",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "build": "chmod +x build.sh && ./build.sh",
+    "build:client": "cd client && npm install && npm run build",
+    "build:server": "cd server && npm install",
+    "start": "cd server && npm start"
+  }
+} 
