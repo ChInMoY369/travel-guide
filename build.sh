@@ -11,15 +11,12 @@ cd client
 echo "Installing dependencies..."
 npm install --no-audit --no-fund
 
-# Check if vite exists in node_modules
-if [ -f "./node_modules/.bin/vite" ]; then
-  echo "Using local vite from node_modules..."
-  ./node_modules/.bin/vite build
-else
-  echo "Installing vite globally..."
-  npm install -g vite
-  echo "Running vite build..."
-  vite build
-fi
+# Explicitly install vite in the client directory
+echo "Explicitly installing vite..."
+npm install vite@5.1.6 @vitejs/plugin-react --no-audit --no-fund
+
+# Run the build using npx to ensure we use the local version
+echo "Running vite build with npx..."
+npx vite build
 
 echo "Build completed successfully!" 

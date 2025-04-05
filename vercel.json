@@ -1,9 +1,8 @@
 {
   "version": 2,
   "name": "travel-guide",
-  "buildCommand": "chmod +x build.sh && ./build.sh",
+  "buildCommand": "npm run vercel-build",
   "outputDirectory": "client/dist",
-  "framework": "vite",
   "rewrites": [
     {
       "source": "/api/health",
@@ -86,12 +85,6 @@
     "MONGODB_URI": "${MONGODB_URI}",
     "GEMINI_API_KEY": "${GEMINI_API_KEY}",
     "OPENWEATHER_API_KEY": "${OPENWEATHER_API_KEY}",
-    "SMTP_HOST": "${SMTP_HOST}",
-    "SMTP_PORT": "${SMTP_PORT}",
-    "SMTP_USER": "${SMTP_USER}",
-    "SMTP_PASS": "${SMTP_PASS}",
-    "SMTP_SECURE": "${SMTP_SECURE}",
-    "REMINDER_CHECK_INTERVAL": "${REMINDER_CHECK_INTERVAL}",
     "VITE_APP_API_URL": "/api",
     "VITE_APP_NAME": "Travel Guide",
     "VITE_APP_VERSION": "1.0.0"

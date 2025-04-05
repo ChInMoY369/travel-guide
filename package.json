@@ -4,12 +4,10 @@
   "private": true,
   "description": "Full-stack Travel Guide application",
   "engines": {
-    "node": ">=16"
+    "node": "18.x"
   },
   "scripts": {
-    "build": "chmod +x build.sh && ./build.sh",
-    "build:client": "cd client && npm install && npm run build",
-    "build:server": "cd server && npm install",
-    "start": "cd server && npm start"
+    "build": "cd client && npm install --legacy-peer-deps && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build",
+    "vercel-build": "cd client && npm install --legacy-peer-deps && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build"
   }
 } 
