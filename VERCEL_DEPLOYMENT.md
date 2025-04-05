@@ -102,6 +102,12 @@ If you encounter deployment issues:
    - Check that uploads directory permissions are correct
    - Verify the static file routes in vercel.json are properly configured
 
+6. **Path Parameter Errors**
+   - If you see errors like "Rewrite at index X has segment ':path' in destination property but not in source or has property", make sure that any named path parameters (like `:path*`) used in a `destination` are also present in the `source` or `has` property
+   - For uploads, use `/uploads/:path*` in both source and destination
+   - For static files, use `/:path*.extension` instead of `/(.*).extension`
+   - Keep the pattern consistent between `rewrites` and `headers` sections
+
 ## Server Connection Issues
 
 If your server is not connecting properly in the Vercel deployment:
