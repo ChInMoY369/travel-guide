@@ -2,8 +2,8 @@
   "version": 2,
   "name": "travel-guide",
   "buildCommand": "cd client && npm install && npm run build",
-  "outputDirectory": "client/build",
-  "framework": "create-react-app",
+  "outputDirectory": "client/dist",
+  "framework": "vite",
   "rewrites": [
     {
       "source": "/api/health",

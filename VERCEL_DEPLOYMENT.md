@@ -67,6 +67,7 @@ Frontend variables are automatically set in the vercel.json, but you can overrid
 ## Important Configuration Notes
 
 The `vercel.json` has been configured to:
+- Use Vite as the frontend framework with `client/dist` as the output directory
 - Resolve conflicts between `routes` and `rewrites` by using the proper Vercel syntax
 - Set up proper header configurations for API routes and static assets
 - Configure environment variables with placeholder values
@@ -81,17 +82,22 @@ If you encounter deployment issues:
    - Click on the latest deployment
    - Click "View Logs" to see detailed build and runtime logs
 
-2. **Database Connection Issues**
+2. **Output Directory Errors**
+   - If you see "No Output Directory named 'build' found after the Build completed", make sure the `outputDirectory` in vercel.json matches what your build tool generates
+   - For Vite projects, the correct output directory is `client/dist` (not `client/build`)
+   - For Create React App projects, the output directory would be `client/build`
+
+3. **Database Connection Issues**
    - Verify your `MONGODB_URI` is correct
    - Ensure your MongoDB Atlas cluster has the correct network access rules
    - Check that your database user has the proper permissions
 
-3. **API Errors**
+4. **API Errors**
    - Test the `/api/health` endpoint to check API status
    - Use the `/api/diagnostic` endpoint for detailed database connection info
    - Verify CORS settings if the frontend can't connect to the API
 
-4. **Static File Issues**
+5. **Static File Issues**
    - Check that uploads directory permissions are correct
    - Verify the static file routes in vercel.json are properly configured
 
