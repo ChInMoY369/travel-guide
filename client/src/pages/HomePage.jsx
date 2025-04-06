@@ -28,7 +28,7 @@ import {
   AlertTitle
 } from '@mui/material';
 import { LocationOn, AccessTime, ArrowForward, WbSunny, KeyboardArrowDown, Cloud, Grain, AcUnit, Thunderstorm, Thermostat, FiberManualRecord, InfoOutlined, DarkMode, LightMode, PlayArrow } from '@mui/icons-material';
-import api, { getAttractions, getCurrentWeather, getWeatherForecast } from '../utils/api';
+import api, { getAttractions, getCurrentWeather, getWeatherForecast, API_URL } from '../utils/api';
 import { saveHomeScrollPosition, restoreHomeScrollPosition } from '../utils/scrollPosition';
 import { motion } from 'framer-motion';
 import { initAnimations, initScrollReveal } from '../script';
@@ -767,7 +767,13 @@ const HomePage = () => {
     try {
       setSectionsLoading(true);
       
+      console.log('Fetching sections from API...');
+      // Make sure we're using the API client that has the baseURL configured
+      // The API client should add the /api prefix from the baseURL
       const response = await api.get('/sections');
+      
+      // Log the full request URL for debugging
+      console.log(`Sections API URL: ${API_URL}/sections`);
       
       if (response.data) {
         console.log('HomePage - Fetched section destinations:', response.data);
@@ -794,6 +800,7 @@ const HomePage = () => {
       setSectionsLoading(false);
     } catch (err) {
       console.error('Error fetching section destinations:', err);
+      console.error('API URL used:', `${API_URL}/sections`);
       setSectionsLoading(false);
     }
   };

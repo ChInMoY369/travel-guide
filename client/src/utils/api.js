@@ -14,6 +14,24 @@ console.log('API URL from Vite env:', import.meta.env.VITE_APP_API_URL);
 console.log('API URL from window.env:', window.env && window.env.VITE_APP_API_URL);
 console.log('Final API URL configured:', API_URL);
 
+// Add global axios request interceptor to debug all requests
+axios.interceptors.request.use(
+  config => {
+    console.log('🔍 AXIOS REQUEST:', {
+      fullUrl: config.baseURL ? `${config.baseURL}${config.url}` : config.url,
+      baseURL: config.baseURL || 'none',
+      url: config.url,
+      method: config.method,
+      params: config.params
+    });
+    return config;
+  },
+  error => {
+    console.error('❌ AXIOS REQUEST ERROR:', error);
+    return Promise.reject(error);
+  }
+);
+
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
@@ -207,8 +225,14 @@ export const getTopAttractions = (limit = 5) => {
 // Weather API calls
 export const getCurrentWeather = async (city = 'Bhubaneswar') => {
   console.log('Fetching current weather for:', city);
+  console.log('Using API URL:', API_URL);
   try {
+    // Make sure we're using the api client with baseURL configured
+    // The full URL should be API_URL + '/weather/current'
     const response = await api.get('/weather/current', { params: { city } });
+    
+    console.log('Full weather request URL:', `${API_URL}/weather/current?city=${encodeURIComponent(city)}`);
+    
     if (!response.data) {
       throw new Error('Empty response received from weather API');
     }
@@ -216,6 +240,7 @@ export const getCurrentWeather = async (city = 'Bhubaneswar') => {
     return response;
   } catch (error) {
     console.error('Error fetching current weather:', error.response?.data || error.message);
+    console.error('Request URL that failed:', `${API_URL}/weather/current?city=${encodeURIComponent(city)}`);
     // Return a rejected promise to be handled by the component
     return Promise.reject({ 
       message: 'Failed to fetch weather data', 
@@ -226,8 +251,14 @@ export const getCurrentWeather = async (city = 'Bhubaneswar') => {
 
 export const getWeatherForecast = async (city = 'Bhubaneswar') => {
   console.log('Fetching weather forecast for:', city);
+  console.log('Using API URL:', API_URL);
   try {
+    // Make sure we're using the api client with baseURL configured
+    // The full URL should be API_URL + '/weather/forecast'
     const response = await api.get('/weather/forecast', { params: { city } });
+    
+    console.log('Full forecast request URL:', `${API_URL}/weather/forecast?city=${encodeURIComponent(city)}`);
+    
     if (!response.data || !Array.isArray(response.data)) {
       throw new Error('Invalid forecast data received from API');
     }
