@@ -1,17 +1,18 @@
 {
   "version": 2,
   "name": "travel-guide",
-  "buildCommand": "cd client && npm install --legacy-peer-deps && npm run build",
-  "outputDirectory": "client/dist",
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/"
+  "builds": [
+    { 
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist",
+        "buildCommand": "npm install --legacy-peer-deps && npm run build"
+      }
     }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/client/dist/$1" }
   ],
   "env": {
     "VITE_APP_API_URL": "/api",

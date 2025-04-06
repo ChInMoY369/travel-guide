@@ -1,0 +1,7 @@
+{
+  "buildCommand": "node vercel-debug.js && bash -c 'if [ -d \"client\" ]; then cd client && npm install --legacy-peer-deps && npm run build; fi'",
+  "outputDirectory": "client/dist",
+  "framework": "vite",
+  "devCommand": "cd client && npm run dev",
+  "installCommand": "npm install --legacy-peer-deps"
+} 

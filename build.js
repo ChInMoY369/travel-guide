@@ -23,28 +23,42 @@ function runCommand(command, cwd = process.cwd()) {
 console.log('Current directory:', process.cwd());
 console.log('Directory contents:', fs.readdirSync(process.cwd()));
 
-const clientDir = path.join(process.cwd(), 'client');
-
-if (fs.existsSync(clientDir)) {
-  console.log('Client directory found at:', clientDir);
-  console.log('Client directory contents:', fs.readdirSync(clientDir));
-  
-  // Install dependencies
-  if (!runCommand('npm install --legacy-peer-deps', clientDir)) {
-    process.exit(1);
-  }
-  
-  // Build the client application using its own build script
-  if (!runCommand('npm run build', clientDir)) {
-    console.log('Trying alternative build command...');
-    if (!runCommand('npx vite build', clientDir)) {
+// Check if we're in client directory already or need to find it
+let clientDir = process.cwd();
+if (!fs.existsSync(path.join(clientDir, 'vite.config.js'))) {
+  // We're not in the client directory yet, so try to find it
+  const possibleClientDir = path.join(process.cwd(), 'client');
+  if (fs.existsSync(possibleClientDir)) {
+    clientDir = possibleClientDir;
+  } else {
+    // Special case for Vercel deployments where the structure might be different
+    console.log('Looking for client files in current directory...');
+    // If we find key client files here, we'll assume we're in the right place
+    const hasPackageJson = fs.existsSync(path.join(process.cwd(), 'package.json'));
+    const hasIndexHtml = fs.existsSync(path.join(process.cwd(), 'index.html'));
+    if (hasPackageJson && hasIndexHtml) {
+      console.log('Found client files in current directory, proceeding with build');
+    } else {
+      console.error('Could not locate the client directory!');
       process.exit(1);
     }
   }
-  
-  console.log('Build completed successfully!');
-} else {
-  console.error('Client directory not found!');
-  console.error('Expected at:', clientDir);
+}
+
+console.log('Using client directory:', clientDir);
+console.log('Client directory contents:', fs.readdirSync(clientDir));
+
+// Install dependencies
+if (!runCommand('npm install --legacy-peer-deps', clientDir)) {
   process.exit(1);
-} 
+}
+
+// Build the client application using its own build script
+if (!runCommand('npm run build', clientDir)) {
+  console.log('Trying alternative build command...');
+  if (!runCommand('npx vite build', clientDir)) {
+    process.exit(1);
+  }
+}
+
+console.log('Build completed successfully!'); 
