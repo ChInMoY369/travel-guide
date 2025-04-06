@@ -1,7 +1,8 @@
 {
   "version": 2,
   "name": "travel-guide",
-  "buildCommand": "npm run vercel-build",
+  "installCommand": "cd server && npm install && cd ../client && npm install --legacy-peer-deps",
+  "buildCommand": "cd client && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build",
   "outputDirectory": "client/dist",
   "rewrites": [
     {
