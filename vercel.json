@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "travel-guide",
-  "buildCommand": "cd client && npm install --legacy-peer-deps && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build",
+  "buildCommand": "node build.js",
   "outputDirectory": "client/dist",
   "rewrites": [
     {

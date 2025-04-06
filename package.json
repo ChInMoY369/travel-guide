@@ -7,7 +7,7 @@
     "node": "18.x"
   },
   "scripts": {
-    "build": "cd client && npm install --legacy-peer-deps && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build",
-    "vercel-build": "cd client && npm install --legacy-peer-deps && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build"
+    "build": "node build.js",
+    "start": "cd client && npm run start"
   }
 } 
