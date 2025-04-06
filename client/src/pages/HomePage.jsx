@@ -368,6 +368,20 @@ const HomePage = () => {
   const [pristineBeaches, setPristineBeaches] = useState([]);
   const [sectionsLoading, setSectionsLoading] = useState(false);
   
+  // Add fallback weather data for when API calls fail
+  const fallbackWeatherData = {
+    temperature: 32,
+    condition: 'Sunny',
+    humidity: 65,
+    windSpeed: 12,
+    icon: '01d',
+    forecast: [
+      { day: 'Today', temp: 32, condition: 'Sunny', icon: '01d' },
+      { day: 'Tomorrow', temp: 30, condition: 'Partly Cloudy', icon: '02d' },
+      { day: 'Day 3', temp: 29, condition: 'Cloudy', icon: '03d' }
+    ]
+  };
+
   // Initialize only once after component mounts
   useEffect(() => {
     // Initialize animations only once - no scroll handlers needed here

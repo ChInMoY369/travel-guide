@@ -1,9 +1,18 @@
 import axios from 'axios';
 
-// Use the API URL from environment variables with fallback for production
-const API_URL = import.meta.env.VITE_APP_API_URL || '/api';
+// Check for environment variables in multiple locations
+// 1. Vite's import.meta.env (build-time)
+// 2. window.env (runtime injection in HTML)
+// 3. Fallback to relative path
+const API_URL = import.meta.env.VITE_APP_API_URL || 
+                (window.env && window.env.VITE_APP_API_URL) || 
+                'https://travel-guide-9n2b.onrender.com/api';
 
-console.log('API configured with base URL:', API_URL);
+// Add more detailed logging to diagnose the issue
+console.log('Environment variables available:', Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')));
+console.log('API URL from Vite env:', import.meta.env.VITE_APP_API_URL);
+console.log('API URL from window.env:', window.env && window.env.VITE_APP_API_URL);
+console.log('Final API URL configured:', API_URL);
 
 // Create axios instance
 const api = axios.create({
