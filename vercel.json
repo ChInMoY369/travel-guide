@@ -1,91 +1,19 @@
 {
   "version": 2,
   "name": "travel-guide",
-  "installCommand": "cd server && npm install && cd ../client && npm install --legacy-peer-deps",
-  "buildCommand": "cd client && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build",
+  "buildCommand": "cd client && npm install --legacy-peer-deps && npm install vite@latest @vitejs/plugin-react --save-dev && npx vite build",
   "outputDirectory": "client/dist",
   "rewrites": [
     {
-      "source": "/api/health",
-      "destination": "/server/vercel.js"
-    },
-    {
       "source": "/api/(.*)",
-      "destination": "/server/vercel.js"
-    },
-    {
-      "source": "/uploads/:path*",
-      "destination": "/server/uploads/:path*"
+      "destination": "/api"
     },
     {
       "source": "/(.*)",
       "destination": "/"
     }
   ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Headers", "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS" },
-        { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-      ]
-    },
-    {
-      "source": "/uploads/:path*",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/:path*.js",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/:path*.css",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/:path*.png",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/:path*.jpg",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/:path*.webp",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/:path*.svg",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    }
-  ],
   "env": {
-    "NODE_ENV": "production",
-    "VERCEL": "true",
-    "PORT": "5000",
-    "JWT_SECRET": "mysecrettoken123",
-    "JWT_EXPIRE": "30d",
-    "FRONTEND_URL": "${FRONTEND_URL}",
-    "MONGODB_URI": "${MONGODB_URI}",
-    "GEMINI_API_KEY": "${GEMINI_API_KEY}",
-    "OPENWEATHER_API_KEY": "${OPENWEATHER_API_KEY}",
     "VITE_APP_API_URL": "/api",
     "VITE_APP_NAME": "Travel Guide",
     "VITE_APP_VERSION": "1.0.0"
