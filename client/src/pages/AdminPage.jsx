@@ -17,8 +17,7 @@ import {
   LocationOn as LocationIcon,
   BeachAccess as BeachIcon
 } from '@mui/icons-material';
-import axios from 'axios';
-import { getAttractions } from '../utils/api';
+import api from '../utils/api';
 import AdminTabPanel from './AdminTabPanel';
 import CulturalInsightsForm from '../components/admin/CulturalInsightsForm';
 import DestinationsForm from '../components/admin/DestinationsForm';
@@ -153,7 +152,7 @@ const AdminPage = () => {
           return;
         }
 
-        const response = await axios.get('/api/users/check-admin', {
+        const response = await api.get('/users/check-admin', {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -187,7 +186,7 @@ const AdminPage = () => {
       }
       
       // Make API request
-      const response = await axios.get('/api/attractions', {
+      const response = await api.get('/attractions', {
         headers: { Authorization: `Bearer ${token}` },
         params: { limit: 100 } // Increase the limit to fetch more attractions
       });
@@ -216,7 +215,7 @@ const AdminPage = () => {
         
         // Fetch all hotels
         try {
-          const hotelsResponse = await axios.get('/api/hotels', {
+          const hotelsResponse = await api.get('/hotels', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setHotels(hotelsResponse.data || []);
@@ -232,7 +231,7 @@ const AdminPage = () => {
         
         // Fetch all restaurants
         try {
-          const restaurantsResponse = await axios.get('/api/restaurants', {
+          const restaurantsResponse = await api.get('/restaurants', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setRestaurants(restaurantsResponse.data || []);
@@ -511,7 +510,7 @@ const AdminPage = () => {
       console.log('Validated attraction data ready for submission:', JSON.stringify(attractionData, null, 2));
       
       try {
-        const response = await axios.post('/api/attractions', attractionData, {
+        const response = await api.post('/attractions', attractionData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -628,7 +627,7 @@ const AdminPage = () => {
       }
       
       // Make API request
-      const response = await axios.delete(`/api/attractions/${attractionToDelete._id}`, {
+      const response = await api.delete(`/attractions/${attractionToDelete._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

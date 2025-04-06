@@ -14,8 +14,7 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon
 } from '@mui/icons-material';
-import axios from 'axios';
-import { getAttractionById } from '../utils/api';
+import api from '../utils/api';
 import AdminTabPanel from './AdminTabPanel';
 import LayoutDesigner from '../components/admin/LayoutDesigner';
 
@@ -185,7 +184,7 @@ const AdminEditPage = () => {
         }
         
         // Make API request
-        const response = await axios.get(`/api/attractions/${id}`, {
+        const response = await api.get(`/attractions/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -280,7 +279,7 @@ const AdminEditPage = () => {
         
         // Fetch all hotels
         try {
-          const hotelsResponse = await axios.get('/api/hotels', {
+          const hotelsResponse = await api.get('/hotels', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setHotels(hotelsResponse.data);
@@ -296,7 +295,7 @@ const AdminEditPage = () => {
         
         // Fetch all restaurants
         try {
-          const restaurantsResponse = await axios.get('/api/restaurants', {
+          const restaurantsResponse = await api.get('/restaurants', {
             headers: { Authorization: `Bearer ${token}` }
           });
           setRestaurants(restaurantsResponse.data);
@@ -312,7 +311,7 @@ const AdminEditPage = () => {
         
         // Fetch all attractions (except current one)
         try {
-          const attractionsResponse = await axios.get('/api/attractions', {
+          const attractionsResponse = await api.get('/attractions', {
             headers: { Authorization: `Bearer ${token}` }
           });
           // Filter out the current attraction
@@ -581,7 +580,7 @@ const AdminEditPage = () => {
       }
       
       // Make API request to update the attraction
-      await axios.put(`/api/attractions/${id}`, cleanedFormData, {
+      await api.put(`/attractions/${id}`, cleanedFormData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

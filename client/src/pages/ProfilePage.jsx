@@ -335,9 +335,9 @@ const ProfilePage = () => {
         console.error('API utility function failed, trying direct fetch:', apiError);
         
         // Fallback to direct fetch API call
-        const baseUrl = window.location.origin.includes('localhost') 
-          ? 'http://localhost:5000' 
-          : window.location.origin;
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? 'https://travel-guide-9n2b.onrender.com'
+          : 'https://travel-guide-9n2b.onrender.com';
         
         const result = await fetch(`${baseUrl}/api/images/profile`, {
           method: 'POST',

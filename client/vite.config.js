@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
   }
   
   // Development config with proxy setup (unchanged)
-  const apiUrl = env.VITE_APP_API_URL || 'http://localhost:5000/api'
+  const apiUrl = env.VITE_APP_API_URL || 'https://travel-guide-9n2b.onrender.com/api'
   const backendUrl = apiUrl.split('/api')[0] // Extract the base URL without the /api part
   
   return {

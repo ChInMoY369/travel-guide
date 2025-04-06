@@ -39,12 +39,13 @@ import {
   WbSunny as WbSunnyIcon,
   Check as CheckIcon
 } from '@mui/icons-material';
-import { getAttractionById, getAttractions, addAttractionReview } from '../utils/api';
+import { getAttractionById, getAttractions, addAttractionReview, addFavoriteAttraction, removeFavoriteAttraction } from '../utils/api';
 import { AuthContext } from '../contexts/AuthContext';
 import { DarkModeContext } from '../contexts/DarkModeContext';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AttractionTabPanel from './attraction/AttractionTabPanel';
+import api from '../utils/api';
 
 // Function to sanitize markdown formatting that might be in the content
 const sanitizeContent = (text) => {
@@ -102,7 +103,7 @@ const AttractionDetails = () => {
           
           try {
             // Import and use the api utility that includes auth tokens
-            const response = await axios.get(`/api/attractions/${paramId}`);
+            const response = await api.get(`/attractions/${paramId}`);
             console.log('AttractionDetails - ObjectId fetch response:', response);
             attractionData = response.data;
           } catch (err) {
@@ -130,7 +131,7 @@ const AttractionDetails = () => {
           
           try {
             // Use the api utility
-            const response = await axios.get(`/api/attractions?name=${encodeURIComponent(nameFromSlug)}`);
+            const response = await api.get(`/attractions?name=${encodeURIComponent(nameFromSlug)}`);
             console.log('AttractionDetails - Name search response:', response);
             
             if (response.data.attractions && response.data.attractions.length > 0) {
@@ -261,15 +262,10 @@ const AttractionDetails = () => {
       
       if (!favorite) {
         // Add to favorites
-        await axios.post('/api/users/favorites', 
-          { attractionId: attraction._id },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await addFavoriteAttraction(attraction._id);
       } else {
         // Remove from favorites
-        await axios.delete(`/api/users/favorites/${attraction._id}`, 
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await removeFavoriteAttraction(attraction._id);
       }
     } catch (err) {
       console.error('Error toggling favorite status:', err);
