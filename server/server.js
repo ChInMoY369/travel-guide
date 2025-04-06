@@ -103,25 +103,61 @@ try {
       
       console.log(`Database connection status: ${dbStatusText} (${dbStatus})`);
       
-      // Count attractions in database
-      const attractionCount = await Attraction.countDocuments();
-      console.log(`Found ${attractionCount} attractions in database`);
+      // Try to reconnect if not connected
+      if (dbStatus !== 1) {
+        console.log('Database not connected, attempting to connect...');
+        try {
+          await connectDB();
+          console.log('Connection attempt completed.');
+        } catch (connErr) {
+          console.error('Connection attempt failed:', connErr.message);
+        }
+      }
       
-      // Get a sample of attractions
-      const attractions = await Attraction.find().limit(5).select('_id name type');
-      console.log('Sample attractions:', attractions);
+      // Detailed environment info
+      const envInfo = {
+        NODE_ENV: process.env.NODE_ENV,
+        PORT: process.env.PORT,
+        FRONTEND_URL: process.env.FRONTEND_URL,
+        MONGODB_URI_SET: !!process.env.MONGODB_URI,
+        MONGODB_URI_PREFIX: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'not set',
+        RENDER: process.env.RENDER,
+        VERCEL: process.env.VERCEL
+      };
+      
+      // Count attractions if connected
+      let attractionCount = 0;
+      let attractions = [];
+      let collectionList = [];
+      
+      if (dbStatus === 1 && mongoose.connection.db) {
+        try {
+          attractionCount = await Attraction.countDocuments();
+          console.log(`Found ${attractionCount} attractions in database`);
+          
+          // Get a sample of attractions
+          attractions = await Attraction.find().limit(5).select('_id name type');
+          
+          // List collections
+          collectionList = await mongoose.connection.db.listCollections().toArray();
+          collectionList = collectionList.map(c => c.name);
+        } catch (dbQueryError) {
+          console.error('Error querying database:', dbQueryError.message);
+        }
+      }
       
       // Return diagnostic information
       res.json({
         serverStatus: 'online',
-        environment: process.env.NODE_ENV || 'development',
+        environment: envInfo,
         database: {
           status: dbStatusText,
           statusCode: dbStatus,
           connectionString: process.env.MONGODB_URI ? 
             process.env.MONGODB_URI.replace(/mongodb\+srv:\/\/([^:]+):[^@]+@/, 'mongodb+srv://$1:***@') : 
             'Not configured',
-          name: mongoose.connection.name || 'Not connected'
+          name: mongoose.connection.name || 'Not connected',
+          collections: collectionList
         },
         collections: {
           attractions: {
@@ -134,6 +170,88 @@ try {
       console.error('Diagnostic endpoint error:', error);
       res.status(500).json({
         serverStatus: 'error',
+        error: error.message,
+        stack: process.env.NODE_ENV === 'production' ? null : error.stack
+      });
+    }
+  });
+
+  // Add after the diagnostic endpoint
+  app.get('/api/debug/mongodb', async (req, res) => {
+    try {
+      console.log('MongoDB debug endpoint called');
+      
+      // Log environment
+      console.log('Environment variables:');
+      console.log('- NODE_ENV:', process.env.NODE_ENV);
+      console.log('- MONGODB_URI set:', !!process.env.MONGODB_URI);
+      
+      // Try connecting without using the existing connection
+      console.log('Attempting direct MongoDB connection...');
+      
+      // Create a new mongoose instance
+      const freshMongoose = require('mongoose');
+      
+      // Don't use the cached connection
+      if (freshMongoose.connection.readyState) {
+        console.log('Closing existing connections...');
+        await freshMongoose.connection.close();
+      }
+      
+      // Connect with a longer timeout
+      console.log('Creating new connection...');
+      await freshMongoose.connect(process.env.MONGODB_URI, {
+        serverSelectionTimeoutMS: 30000,
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 45000,
+      });
+      
+      console.log('Connected to MongoDB');
+      console.log('- Connection state:', freshMongoose.connection.readyState);
+      console.log('- Database name:', freshMongoose.connection.name);
+      
+      // Check database
+      const db = freshMongoose.connection.db;
+      if (!db) {
+        throw new Error('Database object is undefined after successful connection');
+      }
+      
+      // Get database stats
+      const stats = await db.stats();
+      console.log('Database stats:', JSON.stringify(stats));
+      
+      // List collections
+      const collections = await db.listCollections().toArray();
+      console.log('Collections:', collections.map(c => c.name));
+      
+      // Try a simple document count from a collection
+      let testCollection = null;
+      if (collections.length > 0) {
+        testCollection = collections[0].name;
+        const count = await db.collection(testCollection).countDocuments();
+        console.log(`Count in ${testCollection}: ${count}`);
+      }
+      
+      // Close this connection to not interfere with the main one
+      await freshMongoose.connection.close();
+      
+      // Return success
+      res.json({
+        success: true,
+        message: 'MongoDB connection test successful',
+        details: {
+          dbName: freshMongoose.connection.name,
+          collections: collections.map(c => c.name),
+          stats: stats,
+          testCollection: testCollection ? {
+            name: testCollection
+          } : null
+        }
+      });
+    } catch (error) {
+      console.error('MongoDB debug error:', error);
+      res.status(500).json({
+        success: false,
         error: error.message,
         stack: process.env.NODE_ENV === 'production' ? null : error.stack
       });
