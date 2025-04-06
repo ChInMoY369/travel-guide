@@ -19,7 +19,7 @@ function runCommand(command, cwd = process.cwd()) {
   }
 }
 
-// Check if client directory exists
+// Debugging: Show current directory and files
 console.log('Current directory:', process.cwd());
 console.log('Directory contents:', fs.readdirSync(process.cwd()));
 
@@ -34,14 +34,12 @@ if (fs.existsSync(clientDir)) {
     process.exit(1);
   }
   
-  // Install Vite specifically
-  if (!runCommand('npm install vite@latest @vitejs/plugin-react --save-dev', clientDir)) {
-    process.exit(1);
-  }
-  
-  // Run build
-  if (!runCommand('npx vite build', clientDir)) {
-    process.exit(1);
+  // Build the client application using its own build script
+  if (!runCommand('npm run build', clientDir)) {
+    console.log('Trying alternative build command...');
+    if (!runCommand('npx vite build', clientDir)) {
+      process.exit(1);
+    }
   }
   
   console.log('Build completed successfully!');
