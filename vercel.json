@@ -15,7 +15,7 @@
     { "src": "/(.*)", "dest": "/client/dist/$1" }
   ],
   "env": {
-    "VITE_APP_API_URL": "https://travel-guide-9n2b.onrender.com/api",
+    "VITE_APP_API_URL": "https://travel-guide-9n2b.onrender.com",
     "VITE_APP_NAME": "Travel Guide",
     "VITE_APP_VERSION": "1.0.0"
   }
