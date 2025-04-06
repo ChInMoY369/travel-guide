@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "travel-guide",
-  "buildCommand": "node build.js",
+  "buildCommand": "cd client && npm install --legacy-peer-deps && npm run build",
   "outputDirectory": "client/dist",
   "rewrites": [
     {

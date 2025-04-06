@@ -1,7 +1,7 @@
 // This file is a simple bridge to run the correct build command
-// It's needed because Vercel is looking for client/build.js
+// Using CommonJS syntax for compatibility
 
-import { execSync } from 'child_process';
+const { execSync } = require('child_process');
 
 try {
   console.log('Starting Vite build process...');
